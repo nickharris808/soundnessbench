@@ -52,8 +52,15 @@ def test_every_committed_answer_matches_a_fresh_enumeration():
 
 
 def test_committed_file_covers_every_task_and_nothing_else():
+    """One file serves both splits -- entries are keyed by a hash of the
+    relations, not by split -- so the comparison is against their union. The
+    'nothing else' half is the important one: a leftover entry is an answer to a
+    question nobody asks any more."""
+    from soundnessbench.hard import generate_hard_suite
+
     committed = json.loads(GROUND_TRUTH_PATH.read_text(encoding="utf-8"))["entries"]
-    keys = {task_key(t.domain, t.guard, t.safety, t.box) for t in TASKS}
+    every = list(TASKS) + generate_hard_suite()
+    keys = {task_key(t.domain, t.guard, t.safety, t.box) for t in every}
     assert set(committed) == keys
 
 

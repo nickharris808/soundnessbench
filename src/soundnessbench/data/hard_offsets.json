@@ -1,0 +1,47 @@
+{
+  "entries": {
+    "1a4d171a000f6cf0ef49518d51e60969caeae49281b358662299b6e8fdcbf304:0": {
+      "conjunct": 0,
+      "id": "libxml2_len_overflow",
+      "k": null
+    },
+    "50d781641d8e65ec95020bb3461f69bca2dab341e41727653f03051601a9cc3f:0": {
+      "conjunct": 0,
+      "id": "openssl_heartbeat",
+      "k": 17
+    },
+    "552184d27ebbaec37af0568007a4af3b5b7737a13c74e617e11d1545e0f28520:0": {
+      "conjunct": 0,
+      "id": "libpng_rfc1123",
+      "k": 1
+    },
+    "ba34d0b545acd8b749b86b05d3f70ede190cb08a60f0c6c4d5ebbc9eed911ecc:0": {
+      "conjunct": 0,
+      "id": "sudo_set_cmnd",
+      "k": 1
+    },
+    "c622b3aac2ee70cbd9ad5d0ed623f92b3b7aa21d19afa1b2e1e1e91d420dceab:0": {
+      "conjunct": 0,
+      "id": "zlib_inflate_extra",
+      "k": null
+    },
+    "c622b3aac2ee70cbd9ad5d0ed623f92b3b7aa21d19afa1b2e1e1e91d420dceab:1": {
+      "conjunct": 1,
+      "id": "zlib_inflate_extra",
+      "k": 1
+    },
+    "f32577ae0bf6dfe13df5c9c8858e810adc7d7be18d121acae7397c2397cd12ef:0": {
+      "conjunct": 0,
+      "id": "curl_ntlm_type3",
+      "k": null
+    },
+    "f32577ae0bf6dfe13df5c9c8858e810adc7d7be18d121acae7397c2397cd12ef:1": {
+      "conjunct": 1,
+      "id": "curl_ntlm_type3",
+      "k": 1
+    }
+  },
+  "n_entries": 8,
+  "note": "Smallest relaxation of each guard's first conjunct that admits a forbidden state over the task box, found by exhaustive enumeration. Keyed by a hash of the relations, so an edited corpus misses the cache and is recomputed rather than served stale.",
+  "schema": "soundnessbench/hard-offsets/v1"
+}

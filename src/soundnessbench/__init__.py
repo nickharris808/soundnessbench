@@ -11,7 +11,7 @@ from .baselines import BASELINES, run_baseline
 from .scoring import ABSTAIN, SOUND, UNSOUND, Answer, Score, score_submission
 from .tasks import FAMILIES, Task, brute_force_over_acceptance, generate_suite
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 
 __all__ = [
     "generate_suite",

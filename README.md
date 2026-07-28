@@ -130,6 +130,52 @@ still useful.
 
 **Omitted answers count as abstentions**, so you cannot raise coverage by dropping the hard tasks.
 
+## The hard split: real CVE relations
+
+The task families below are synthetic, and `SCOPE.md` has always said so. That is the strongest
+objection to the benchmark — seven generated shapes can be tuned for. The **hard split** answers it.
+
+```bash
+soundnessbench --split hard leaderboard
+soundnessbench --split hard tasks --out tasks.json
+```
+
+Every relation in it comes from the published
+[cve-proof-corpus](https://huggingface.co/datasets/nickh007/cve-proof-corpus): the check a real
+historical vulnerability class turned on, transcribed as linear atoms. Real specs bring more
+variables, more domain constraints, and several safety conjuncts, so a tool that handles one guard
+atom over two variables can score well on the public split and fall over here.
+
+**The unsound variants are constructed, and the construction is the interesting part.** The first
+design used fixed weakenings — relax by one, relax by eight — and it did not work: on relations with
+slack between the guard and the safety property, those edits changed nothing, so 16 of 21 tasks came
+out sound and "always answer SOUND" scored 76%. A benchmark a constant answer beats is not measuring
+anything.
+
+So the split asks a sharper question: **what is the smallest edit that breaks this guard?** For each
+relation, an exhaustive search finds the minimal relaxation `k` that admits a forbidden state. The
+split then contains the guard relaxed by `k` (unsound by exactly one step) and, where `k > 1`, by
+`k − 1` (sound by exactly one step). Getting the order of magnitude right is not enough.
+
+| Family | What it is |
+|---|---|
+| `cve-fixed` | The relation as fixed, unmodified. Sound. |
+| `cve-edge-unsound` | Relaxed by the minimal breaking edit. Unsound by one step. |
+| `cve-edge-sound` | Relaxed by one less than that. Sound by one step. |
+| `cve-dropped` | A guard conjunct removed entirely, as a refactor might. |
+
+Nothing here is a statement about any current version of any software. The relations are historical
+and public; the weakenings are constructed, are not code any project shipped, and every task says so
+in its note.
+
+Boxes are narrowed where a real variable's range is too wide to enumerate — and the task records the
+narrowing and the real bound, because narrowing changes the question. The rule the public split
+follows applies unchanged: **every answer comes from exhaustive enumeration**, or it does not ship.
+
+**Score in your browser:** [the leaderboard
+Space](https://huggingface.co/spaces/nickh007/soundnessbench-leaderboard) runs the whole benchmark
+client-side. Your submission is never uploaded.
+
 ## Task families
 
 | Family | Shape | The trap |

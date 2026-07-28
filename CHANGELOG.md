@@ -3,6 +3,27 @@
 All notable changes to this package. Format follows [Keep a Changelog](https://keepachangelog.com/);
 versioning is [semantic](https://semver.org/).
 
+## [0.3.0]
+
+### Added
+- **The hard split** (`--split hard`): tasks whose relations are taken from real historical CVE
+  classes in `cve-proof-corpus`, which ships inside the package. Unsound variants are built by
+  searching for the **minimal edit that breaks each guard**, so a sound/unsound pair can differ by
+  one. Constructed weakenings are labelled as constructed in every task's note; nothing in the split
+  is a statement about any current version of any software.
+- `--split {public,hard,all}` on every subcommand. A score is only comparable to another score on
+  the same split, so the split is named in the output.
+- `soundnessbench.hard.minimal_break()` and a committed `data/hard_offsets.json`, keyed by a content
+  hash of the relations exactly like the ground truth — an edited corpus misses the cache and is
+  recomputed rather than served stale.
+- A **leaderboard Space**: <https://huggingface.co/spaces/nickh007/soundnessbench-leaderboard>.
+  Scoring runs client-side under Pyodide; submissions are never uploaded, because there is no server
+  to upload them to.
+
+### Fixed
+- `verify-ground-truth` now covers both splits. One file serves both (entries are keyed by relation
+  hash), so verifying only one split would have let `--write` silently drop the other's answers.
+
 ## [0.2.0]
 
 ### Added

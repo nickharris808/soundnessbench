@@ -22,6 +22,7 @@ from typing import Any
 
 from .baselines import BASELINES, run_baseline
 from .groundtruth import GROUND_TRUTH_PATH, build_ground_truth, task_key
+from .hard import OFFSETS_PATH, build_offsets, generate_hard_suite
 from .scoring import Score, score_submission, validate_submission
 from .tasks import brute_force_over_acceptance, generate_suite
 
@@ -48,6 +49,16 @@ def main(argv: Any = None) -> int:
     parser = argparse.ArgumentParser(
         prog="soundnessbench",
         description="A public benchmark for guard-soundness tools.",
+    )
+    parser.add_argument(
+        "--split",
+        choices=["public", "hard", "all"],
+        default="public",
+        help=(
+            "which task suite to use. 'public' is the synthetic families; 'hard' is "
+            "derived from real CVE relations in cve-proof-corpus; 'all' is both. A "
+            "score is only comparable to another score on the same split."
+        ),
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -96,7 +107,24 @@ def main(argv: Any = None) -> int:
     )
 
     args = parser.parse_args(argv)
-    tasks = generate_suite()
+
+    if args.split == "public":
+        tasks = generate_suite()
+    elif args.split == "hard":
+        tasks = generate_hard_suite()
+    else:
+        tasks = generate_suite() + generate_hard_suite()
+
+    if args.split in ("hard", "all") and not generate_hard_suite():
+        # The hard split needs the bundled corpus. If it is missing the split is
+        # empty, and scoring against an empty suite would report a perfect result
+        # for having answered nothing.
+        print(
+            "error: the hard split is empty -- the bundled CVE corpus is missing. "
+            "Reinstall the package rather than scoring against no tasks.",
+            file=sys.stderr,
+        )
+        return 2
 
     if args.command == "tasks":
         payload = [t.to_dict() if args.with_answers else t.public_dict() for t in tasks]
@@ -123,8 +151,12 @@ def main(argv: Any = None) -> int:
         # exists only because this exists.
         import json as _json
 
+        # Ground truth is one file across both splits (entries are keyed by a
+        # hash of the relations), so verification always covers both -- otherwise
+        # `--split public --write` would silently drop the hard split's answers.
+        every_task = generate_suite() + generate_hard_suite()
         recomputed = {}
-        for t_ in tasks:
+        for t_ in every_task:
             count, witness = brute_force_over_acceptance(t_.domain, t_.guard, t_.safety, t_.box)
             recomputed[task_key(t_.domain, t_.guard, t_.safety, t_.box)] = {
                 "task_id": t_.task_id,
@@ -144,6 +176,12 @@ def main(argv: Any = None) -> int:
                 _json.dumps(doc, indent=2, sort_keys=True) + "\n", encoding="utf-8"
             )
             print(f"wrote {GROUND_TRUTH_PATH} ({len(recomputed)} entries)")
+
+            offsets = build_offsets()
+            OFFSETS_PATH.write_text(
+                _json.dumps(offsets, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+            )
+            print(f"wrote {OFFSETS_PATH} ({offsets['n_entries']} entries)")
             return 0
 
         try:

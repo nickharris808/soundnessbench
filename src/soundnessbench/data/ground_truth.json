@@ -16,6 +16,16 @@
         "off": 255
       }
     },
+    "0fee55d4d19eeed08f251831561c2debdc4a58b0514a35827373eb15ff4ae864": {
+      "over_acceptance": 0,
+      "task_id": "hard-libxml2_len_overflow-wide",
+      "witness": null
+    },
+    "11ef4e1c531572dc783ad446e0ae15f8cf7ae19a05ff36ed5d791a40d14aa335": {
+      "over_acceptance": 0,
+      "task_id": "hard-curl_ntlm_type3-dropped",
+      "witness": null
+    },
     "146911279356f3022e68c4876b65b63e13b382cb2907ae96ae1c4989eaf8073d": {
       "over_acceptance": 125,
       "task_id": "bounds-003",
@@ -40,6 +50,11 @@
         "record_len": 0
       }
     },
+    "1a4d171a000f6cf0ef49518d51e60969caeae49281b358662299b6e8fdcbf304": {
+      "over_acceptance": 0,
+      "task_id": "hard-libxml2_len_overflow-fixed",
+      "witness": null
+    },
     "1ac26def37d12affa5cd26e2cd94079d610ac0d39456f61460cc7484b79f9332": {
       "over_acceptance": 1,
       "task_id": "offbyone-003",
@@ -50,6 +65,11 @@
     "2213fe6a39d5d95c321f6de6bc67a06e390c06ec1e9c2ea6b1a870c8a24da5e8": {
       "over_acceptance": 0,
       "task_id": "index-004",
+      "witness": null
+    },
+    "2bcac5b2b2261a96d41535f7fd88659261f689f50754d2e62fd9b9181c6b9c77": {
+      "over_acceptance": 0,
+      "task_id": "hard-zlib_inflate_extra-dropped",
       "witness": null
     },
     "313c66dcef757827b24c1643910fd141787b1ab22bea5bf1f0502fed06a61bce": {
@@ -99,6 +119,23 @@
       "task_id": "bounds-006",
       "witness": null
     },
+    "4b8d5badee544118372ca3d226fe9e312363936c981b079e177e355f332d33f7": {
+      "over_acceptance": 1767,
+      "task_id": "hard-zlib_inflate_extra-edge-unsound",
+      "witness": {
+        "zl_copy": 0,
+        "zl_extra_max": 0,
+        "zl_off": 1
+      }
+    },
+    "4ba3dda1cd99990fffae001a0d8701511e7498ec7cb7919f22ce1f6520121619": {
+      "over_acceptance": 446,
+      "task_id": "hard-sudo_set_cmnd-edge-unsound",
+      "witness": {
+        "su_idx": 1,
+        "su_size": 1
+      }
+    },
     "4c59fd7b58bb6e3b618958b789e2c9784862d4289adb94b83bd84274369add05": {
       "over_acceptance": 64,
       "task_id": "index-003",
@@ -106,6 +143,11 @@
         "i": 0,
         "n": 0
       }
+    },
+    "50d781641d8e65ec95020bb3461f69bca2dab341e41727653f03051601a9cc3f": {
+      "over_acceptance": 0,
+      "task_id": "hard-openssl_heartbeat-fixed",
+      "witness": null
     },
     "52b95207bbc4b712cda25a427d620c5196fac6a9919c3baee2f789df7ea749f3": {
       "over_acceptance": 0,
@@ -116,6 +158,20 @@
       "over_acceptance": 0,
       "task_id": "twovar-000",
       "witness": null
+    },
+    "552184d27ebbaec37af0568007a4af3b5b7737a13c74e617e11d1545e0f28520": {
+      "over_acceptance": 0,
+      "task_id": "hard-libpng_rfc1123-fixed",
+      "witness": null
+    },
+    "572c1875c6ba5ba36c3e9abb168fefbfc2d225afe902d53a7b2af5270a5ecda5": {
+      "over_acceptance": 1767,
+      "task_id": "hard-curl_ntlm_type3-edge-unsound",
+      "witness": {
+        "cu_bufsize": 0,
+        "cu_ntresplen": 0,
+        "cu_size": 1
+      }
     },
     "5dc3eddc8c94a8fec77d68a256b485c84e3b5d61e25c6c4bb3dba5749cc57a1d": {
       "over_acceptance": 0,
@@ -171,6 +227,11 @@
       "task_id": "heartbleed-000",
       "witness": null
     },
+    "88a7d6266c0403f8729acc5f36666f65bef6a5af4157f9c72ac43a64afa9e458": {
+      "over_acceptance": 0,
+      "task_id": "hard-openssl_heartbeat-edge-sound",
+      "witness": null
+    },
     "8a8f22fadfbc6b519e9e7499890467c953001702594bb11f6e130a7216226bda": {
       "over_acceptance": 0,
       "task_id": "heartbleed-005",
@@ -222,6 +283,18 @@
       "task_id": "offbyone-000",
       "witness": null
     },
+    "ba34d0b545acd8b749b86b05d3f70ede190cb08a60f0c6c4d5ebbc9eed911ecc": {
+      "over_acceptance": 0,
+      "task_id": "hard-sudo_set_cmnd-fixed",
+      "witness": null
+    },
+    "bb5b928b3c62db38937f4cd97e9f92ed84a74eefb8b7c819461fbfd73563165f": {
+      "over_acceptance": 1,
+      "task_id": "hard-libpng_rfc1123-edge-unsound",
+      "witness": {
+        "pn_month": 0
+      }
+    },
     "c07f62f335ef4f26ce8a885a7915c8ccf112b85c0ec8f4e140d7e7054c26b000": {
       "over_acceptance": 0,
       "task_id": "index-002",
@@ -231,6 +304,19 @@
       "over_acceptance": 0,
       "task_id": "bounds-000",
       "witness": null
+    },
+    "c622b3aac2ee70cbd9ad5d0ed623f92b3b7aa21d19afa1b2e1e1e91d420dceab": {
+      "over_acceptance": 0,
+      "task_id": "hard-zlib_inflate_extra-fixed",
+      "witness": null
+    },
+    "c627d78a738913b4da4897a15413cda16a06db10e35868b338ed7cd51a486114": {
+      "over_acceptance": 445,
+      "task_id": "hard-openssl_heartbeat-edge-unsound",
+      "witness": {
+        "hb_payload": 0,
+        "hb_record_len": 2
+      }
     },
     "c744ae8771672dc9b7dd1196f027fbe125c88f310cc0de224ab0cda023536594": {
       "over_acceptance": 0,
@@ -242,6 +328,13 @@
       "task_id": "offbyone-001",
       "witness": {
         "x": 63
+      }
+    },
+    "d1a034ee561abf010e5440467767215a2fbdd4a556922d0f95230cb0df6a9d0c": {
+      "over_acceptance": 1,
+      "task_id": "hard-libpng_rfc1123-dropped",
+      "witness": {
+        "pn_month": 0
       }
     },
     "d1af83d13e31a474abb8154e21366e4f2a6a48798598d022e02b3327219db364": {
@@ -270,6 +363,11 @@
         "y": 255
       }
     },
+    "f32577ae0bf6dfe13df5c9c8858e810adc7d7be18d121acae7397c2397cd12ef": {
+      "over_acceptance": 0,
+      "task_id": "hard-curl_ntlm_type3-fixed",
+      "witness": null
+    },
     "f8780d6119ceb90af9181beaad878c5c6e7c9eec03101d959e6d09ff2afb738b": {
       "over_acceptance": 1,
       "task_id": "needle-005",
@@ -287,7 +385,7 @@
       }
     }
   },
-  "n_entries": 44,
+  "n_entries": 60,
   "note": "Precomputed answers, keyed by a content hash of each task's relations. This is a cache: deleting it changes speed, never answers. Regenerate with `soundnessbench verify-ground-truth --write`; verify with `soundnessbench verify-ground-truth`.",
   "schema": "soundnessbench/groundtruth/v1"
 }
