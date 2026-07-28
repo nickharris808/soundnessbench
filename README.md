@@ -18,8 +18,13 @@ forbids — computed by exhaustive enumeration, sharing no code with any tool be
 
 <a id="install"></a>
 ```bash
-pip install "soundnessbench@git+https://github.com/nickharris808/soundnessbench@main"
+pip install "soundnessbench[stack]@git+https://github.com/nickharris808/soundnessbench@main"
 ```
+
+The `[stack]` extra pulls in `certkit` and `exploit-counter` so the `certkit-stack` entrant can be
+graded alongside the reference baselines. Without it everything still runs — the benchmark imports
+none of the tools it grades — but the `certkit-stack` row is simply absent from the table below,
+because there is nothing installed to grade.
 
 > **Pre-release.** The PyPI name is reserved and publication is imminent; until then the line above
 > is the working install. It is tested in CI on Linux, macOS, and Windows.
