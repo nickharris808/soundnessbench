@@ -1,0 +1,293 @@
+{
+  "entries": {
+    "03a0bd87507ea93ce727f22ac04259f1844b29189c581f5e2abfef8595bf2c53": {
+      "over_acceptance": 561,
+      "task_id": "wrap-003",
+      "witness": {
+        "a": 48,
+        "b": 80
+      }
+    },
+    "094ab9ebd0d0b43df6e916d51a866a501906474e48914e15bc5dafa74dc409a9": {
+      "over_acceptance": 255,
+      "task_id": "bounds-007",
+      "witness": {
+        "len": 1,
+        "off": 255
+      }
+    },
+    "146911279356f3022e68c4876b65b63e13b382cb2907ae96ae1c4989eaf8073d": {
+      "over_acceptance": 125,
+      "task_id": "bounds-003",
+      "witness": {
+        "len": 1,
+        "off": 63
+      }
+    },
+    "15826f7770402bd46f02403b48d35686eb6d4f849e4baf85c9b2abf86dfd430f": {
+      "over_acceptance": 1,
+      "task_id": "needle-000",
+      "witness": {
+        "x": 511,
+        "y": 511
+      }
+    },
+    "165ef6f0bd8f21d9ee1739474a5abab7441c40c32c99d8f217d6871e2ac0337b": {
+      "over_acceptance": 1533,
+      "task_id": "heartbleed-006",
+      "witness": {
+        "payload": 0,
+        "record_len": 0
+      }
+    },
+    "1ac26def37d12affa5cd26e2cd94079d610ac0d39456f61460cc7484b79f9332": {
+      "over_acceptance": 1,
+      "task_id": "offbyone-003",
+      "witness": {
+        "x": 127
+      }
+    },
+    "2213fe6a39d5d95c321f6de6bc67a06e390c06ec1e9c2ea6b1a870c8a24da5e8": {
+      "over_acceptance": 0,
+      "task_id": "index-004",
+      "witness": null
+    },
+    "313c66dcef757827b24c1643910fd141787b1ab22bea5bf1f0502fed06a61bce": {
+      "over_acceptance": 3,
+      "task_id": "needle-001",
+      "witness": {
+        "x": 510,
+        "y": 511
+      }
+    },
+    "35c835efd2f6de17a902d512fb917a2213b913a584b8dfc50660595cbdaf2cc2": {
+      "over_acceptance": 118,
+      "task_id": "twovar-001",
+      "witness": {
+        "u": 1,
+        "v": 31
+      }
+    },
+    "3661c6c0e9f6de0a63e127e1d040c4720ddfbca664562815cbe43fc6cce1cf59": {
+      "over_acceptance": 31,
+      "task_id": "bounds-001",
+      "witness": {
+        "len": 1,
+        "off": 31
+      }
+    },
+    "3d860cff739e1bdedf49c0a0c2f601fe0a5e2e6dc9601f4d2279027621a7c1c4": {
+      "over_acceptance": 1,
+      "task_id": "needle-003",
+      "witness": {
+        "x": 255,
+        "y": 255
+      }
+    },
+    "40e822932619fae0249d3efb0a5d019993b930a8fa49bd042597383e588c35c7": {
+      "over_acceptance": 0,
+      "task_id": "heartbleed-002",
+      "witness": null
+    },
+    "42e10f13e48d0c6a78ff1ce8d44d9453888a61197d32d79873905806ceff7461": {
+      "over_acceptance": 0,
+      "task_id": "bounds-002",
+      "witness": null
+    },
+    "49265ec92a1cff1c2012cd5989a7eb2119d433d62da9492cdef64fb141918fdc": {
+      "over_acceptance": 0,
+      "task_id": "bounds-006",
+      "witness": null
+    },
+    "4c59fd7b58bb6e3b618958b789e2c9784862d4289adb94b83bd84274369add05": {
+      "over_acceptance": 64,
+      "task_id": "index-003",
+      "witness": {
+        "i": 0,
+        "n": 0
+      }
+    },
+    "52b95207bbc4b712cda25a427d620c5196fac6a9919c3baee2f789df7ea749f3": {
+      "over_acceptance": 0,
+      "task_id": "wrap-002",
+      "witness": null
+    },
+    "5463d23644eab413cf228a3162b9e8a2fd9cf04dbfbb6516d7eb3f8cad952d0e": {
+      "over_acceptance": 0,
+      "task_id": "twovar-000",
+      "witness": null
+    },
+    "5dc3eddc8c94a8fec77d68a256b485c84e3b5d61e25c6c4bb3dba5749cc57a1d": {
+      "over_acceptance": 0,
+      "task_id": "twovar-004",
+      "witness": null
+    },
+    "645ca719476fd91cf71b6110c39f81c4ede02890d65908cd1b6bcbaedb1b22fe": {
+      "over_acceptance": 0,
+      "task_id": "bounds-004",
+      "witness": null
+    },
+    "66b17272b5128194083b02be4fde6552eccab0d23818c9fe4bacb58ecb11d9e5": {
+      "over_acceptance": 0,
+      "task_id": "offbyone-002",
+      "witness": null
+    },
+    "6aa9223728a67b7fd2dc1463bd6e4d0df77e42d3ec69505c29b995742be73eb6": {
+      "over_acceptance": 6,
+      "task_id": "needle-002",
+      "witness": {
+        "x": 509,
+        "y": 511
+      }
+    },
+    "6cad04738ebf4dc1b8c583aa6a3821930b055c3edb78a1c25142a0947b84b5b9": {
+      "over_acceptance": 0,
+      "task_id": "wrap-000",
+      "witness": null
+    },
+    "739209ec0a6410bf550f9e3caf5da8d717052e3b18595a99121e38c5cf3de9c0": {
+      "over_acceptance": 378,
+      "task_id": "bounds-005",
+      "witness": {
+        "len": 1,
+        "off": 127
+      }
+    },
+    "7c76a9593b4be6784e398946d11f45bdffaa11bee04f8e037aec907a30e0bf47": {
+      "over_acceptance": 153,
+      "task_id": "wrap-001",
+      "witness": {
+        "a": 24,
+        "b": 40
+      }
+    },
+    "8295b9488abf3996449040ba6f36b1e45c9d60d6c7ed34d7c6fa20c6f9e89961": {
+      "over_acceptance": 0,
+      "task_id": "index-000",
+      "witness": null
+    },
+    "85690e500e7f39f10ebca098284573a10a80e916eb8058ad064d84d17715f381": {
+      "over_acceptance": 0,
+      "task_id": "heartbleed-000",
+      "witness": null
+    },
+    "8a8f22fadfbc6b519e9e7499890467c953001702594bb11f6e130a7216226bda": {
+      "over_acceptance": 0,
+      "task_id": "heartbleed-005",
+      "witness": null
+    },
+    "9991fedad592cc747cf7e79b9cf3980cf84f96fcb6e0201f5572ea4bc84134d3": {
+      "over_acceptance": 1,
+      "task_id": "offbyone-005",
+      "witness": {
+        "x": 255
+      }
+    },
+    "a038d5a44edd7b4afb48dfcf0fc4568465ad8d64e3c060846c230f4f2f6f5d13": {
+      "over_acceptance": 0,
+      "task_id": "wrap-004",
+      "witness": null
+    },
+    "a18c949691857ee5ea82d78c724be665026f16e1601fd85469bd38ce570d8164": {
+      "over_acceptance": 509,
+      "task_id": "heartbleed-001",
+      "witness": {
+        "payload": 0,
+        "record_len": 1
+      }
+    },
+    "a707ad9e5a2abadf435e37eb0ea5a40746b2539c31b2ff8485dc6bb62f2c6b00": {
+      "over_acceptance": 64,
+      "task_id": "index-001",
+      "witness": {
+        "i": 0,
+        "n": 0
+      }
+    },
+    "a8438cec5c7320db9153d20e2f66211fd843e87be963e57aaab2e89e7fe469e7": {
+      "over_acceptance": 0,
+      "task_id": "heartbleed-007",
+      "witness": null
+    },
+    "ad527ff4630f8e31075f503adaea544398421a45b7b64548bae942f9c769ae93": {
+      "over_acceptance": 375,
+      "task_id": "heartbleed-003",
+      "witness": {
+        "payload": 0,
+        "record_len": 2
+      }
+    },
+    "b05b8f04af086b4aceaf5baba06d18e6dde5bb243c09c9cdce417e8b455725ba": {
+      "over_acceptance": 0,
+      "task_id": "offbyone-000",
+      "witness": null
+    },
+    "c07f62f335ef4f26ce8a885a7915c8ccf112b85c0ec8f4e140d7e7054c26b000": {
+      "over_acceptance": 0,
+      "task_id": "index-002",
+      "witness": null
+    },
+    "c37c86d3648d9d1a948ed217c77699ae94c7e85c28316380db82077c7af406c2": {
+      "over_acceptance": 0,
+      "task_id": "bounds-000",
+      "witness": null
+    },
+    "c744ae8771672dc9b7dd1196f027fbe125c88f310cc0de224ab0cda023536594": {
+      "over_acceptance": 0,
+      "task_id": "offbyone-004",
+      "witness": null
+    },
+    "d1892ad659d78f62418d618c70a192de291ef7f480ead7a69c46eae11ee826f3": {
+      "over_acceptance": 1,
+      "task_id": "offbyone-001",
+      "witness": {
+        "x": 63
+      }
+    },
+    "d1af83d13e31a474abb8154e21366e4f2a6a48798598d022e02b3327219db364": {
+      "over_acceptance": 96,
+      "task_id": "twovar-003",
+      "witness": {
+        "u": 1,
+        "v": 62
+      }
+    },
+    "ddbab2623ce5259d69323ac6b9c3fe5afe6e9c683b88d7f73ec045c02e837578": {
+      "over_acceptance": 0,
+      "task_id": "twovar-002",
+      "witness": null
+    },
+    "e4aacfc04728df53189410c17d34216c4c3a4e6c452f99dafe78b5c393477d18": {
+      "over_acceptance": 0,
+      "task_id": "heartbleed-004",
+      "witness": null
+    },
+    "e68e9f354bb55b8ca9ded2b4d4ccca349d52f8947abff31b257a4a3135c098e4": {
+      "over_acceptance": 3,
+      "task_id": "needle-004",
+      "witness": {
+        "x": 254,
+        "y": 255
+      }
+    },
+    "f8780d6119ceb90af9181beaad878c5c6e7c9eec03101d959e6d09ff2afb738b": {
+      "over_acceptance": 1,
+      "task_id": "needle-005",
+      "witness": {
+        "x": 383,
+        "y": 383
+      }
+    },
+    "fb0c683f8c98bdeb41f38536b3c5e353882030844cde837e85af7830fec92b04": {
+      "over_acceptance": 256,
+      "task_id": "index-005",
+      "witness": {
+        "i": 0,
+        "n": 0
+      }
+    }
+  },
+  "n_entries": 44,
+  "note": "Precomputed answers, keyed by a content hash of each task's relations. This is a cache: deleting it changes speed, never answers. Regenerate with `soundnessbench verify-ground-truth --write`; verify with `soundnessbench verify-ground-truth`.",
+  "schema": "soundnessbench/groundtruth/v1"
+}

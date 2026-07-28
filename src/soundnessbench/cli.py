@@ -21,8 +21,9 @@ from pathlib import Path
 from typing import Any
 
 from .baselines import BASELINES, run_baseline
+from .groundtruth import GROUND_TRUTH_PATH, build_ground_truth, task_key
 from .scoring import Score, score_submission, validate_submission
-from .tasks import generate_suite
+from .tasks import brute_force_over_acceptance, generate_suite
 
 
 def _fmt_row(s: Score) -> str:
@@ -78,6 +79,16 @@ def main(argv: Any = None) -> int:
     p_lb = sub.add_parser("leaderboard", help="run every baseline and print the table")
     p_lb.add_argument("--json", action="store_true")
 
+    p_vgt = sub.add_parser(
+        "verify-ground-truth",
+        help="recompute every answer by enumeration and compare to the committed file",
+    )
+    p_vgt.add_argument(
+        "--write",
+        action="store_true",
+        help="regenerate the file from a fresh enumeration instead of checking it",
+    )
+
     p_ds = sub.add_parser("dataset", help="export the suite as JSONL for a dataset hub")
     p_ds.add_argument("--out", type=Path, required=True)
     p_ds.add_argument(
@@ -104,6 +115,68 @@ def main(argv: Any = None) -> int:
                 row = t.to_dict() if args.with_answers else t.public_dict()
                 fh.write(json.dumps(row, sort_keys=True) + "\n")
         print(f"wrote {len(tasks)} rows to {args.out}")
+        return 0
+
+    if args.command == "verify-ground-truth":
+        # Recompute from scratch -- never consult the cache -- and compare. This
+        # is the command that keeps the precomputed file honest; the fast path
+        # exists only because this exists.
+        import json as _json
+
+        recomputed = {}
+        for t_ in tasks:
+            count, witness = brute_force_over_acceptance(t_.domain, t_.guard, t_.safety, t_.box)
+            recomputed[task_key(t_.domain, t_.guard, t_.safety, t_.box)] = {
+                "task_id": t_.task_id,
+                "over_acceptance": count,
+                "witness": witness,
+            }
+
+        if args.write:
+            doc = {
+                "schema": build_ground_truth(tasks)["schema"],
+                "note": build_ground_truth(tasks)["note"],
+                "n_entries": len(recomputed),
+                "entries": recomputed,
+            }
+            GROUND_TRUTH_PATH.parent.mkdir(parents=True, exist_ok=True)
+            GROUND_TRUTH_PATH.write_text(
+                _json.dumps(doc, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+            )
+            print(f"wrote {GROUND_TRUTH_PATH} ({len(recomputed)} entries)")
+            return 0
+
+        try:
+            committed = _json.loads(GROUND_TRUTH_PATH.read_text(encoding="utf-8"))["entries"]
+        except (OSError, KeyError, ValueError) as exc:
+            print(f"error: cannot read {GROUND_TRUTH_PATH}: {exc}", file=sys.stderr)
+            return 2
+
+        problems = []
+        for key, truth in recomputed.items():
+            have = committed.get(key)
+            if have is None:
+                problems.append(f"{truth['task_id']}: no committed answer for this task")
+            elif have.get("over_acceptance") != truth["over_acceptance"]:
+                problems.append(
+                    f"{truth['task_id']}: committed {have.get('over_acceptance')} "
+                    f"but enumeration says {truth['over_acceptance']}"
+                )
+        for key in set(committed) - set(recomputed):
+            problems.append(f"stale entry {committed[key].get('task_id', key[:12])} (no such task)")
+
+        for m in problems:
+            print(f"MISMATCH {m}", file=sys.stderr)
+        if problems:
+            print(
+                f"\n{len(problems)} problem(s). The committed answers do not match a fresh "
+                f"enumeration. Regenerate with --write after confirming the task change was "
+                f"intended.",
+                file=sys.stderr,
+            )
+            return 1
+        print(f"{len(recomputed)} of {len(recomputed)} answers match a fresh enumeration.")
+        print("The precomputed ground truth is a cache, not a claim.")
         return 0
 
     if args.command == "score":

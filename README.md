@@ -144,6 +144,28 @@ still useful.
 
 ## Ground truth
 
+Answers are precomputed and committed to `data/ground_truth.json`, because brute-forcing all 44
+tasks costs ~3 seconds and was being paid on **every** CLI invocation — `soundnessbench tasks` spent
+3 seconds computing answers it then stripped from its own output. It now takes 55 ms.
+
+The obvious risk is a stale file. Two things prevent it:
+
+- **Entries are keyed by a content hash of each task's relations**, not by task id. Change a
+  relation and the key changes, the lookup misses, and the answer is recomputed. A stale entry is
+  unreachable, not merely detectable.
+- **`soundnessbench verify-ground-truth`** recomputes everything by enumeration and compares. Run it
+  in CI. `--write` regenerates after an intended change.
+
+```bash
+$ soundnessbench verify-ground-truth
+44 of 44 answers match a fresh enumeration.
+The precomputed ground truth is a cache, not a claim.
+```
+
+The file is a cache in the strict sense: deleting it changes speed, never answers.
+
+## How the answers are computed
+
 Every answer comes from point-by-point enumeration of the declared box — the dumbest available
 algorithm, chosen because it is too simple to be wrong in an interesting way. `soundnessbench` does not
 import `certkit`, because it has to be able to grade `certkit`.

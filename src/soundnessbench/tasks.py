@@ -38,6 +38,8 @@ from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 from typing import Any
 
+from .groundtruth import load_ground_truth, task_key
+
 __all__ = ["Task", "generate_suite", "brute_force_over_acceptance", "FAMILIES"]
 
 FAMILIES = ("bounds", "heartbleed", "index", "offbyone", "twovar", "wrap", "needle")
@@ -154,7 +156,16 @@ def _finalise(
     box: dict[str, tuple[int, int]],
     note: str = "",
 ) -> Task:
-    count, witness = brute_force_over_acceptance(domain, guard, safety, box)
+    # Reuse the committed answer only when the task's relations hash to the same
+    # key. Any edit to domain/guard/safety/box changes the key, misses, and is
+    # recomputed -- so a stale entry cannot be served. See groundtruth.py.
+    box_json = {k: [v[0], v[1]] for k, v in box.items()}
+    cached = load_ground_truth().get(task_key(domain, guard, safety, box_json))
+    if cached is not None:
+        count = cached["over_acceptance"]
+        witness = cached.get("witness")
+    else:
+        count, witness = brute_force_over_acceptance(domain, guard, safety, box)
     return Task(
         task_id=task_id,
         family=family,
@@ -305,6 +316,9 @@ def _difficulty(box: dict[str, tuple[int, int]]) -> str:
 # --------------------------------------------------------------------------- #
 
 
+_SUITE_CACHE: dict[int, list[Task]] = {}
+
+
 def generate_suite(seed: int = 20260728) -> list[Task]:
     """Build the full task suite.
 
@@ -312,6 +326,10 @@ def generate_suite(seed: int = 20260728) -> list[Task]:
     score is reproducible. Roughly half the tasks are sound by construction, so
     a tool cannot score well by always answering one way.
     """
+    cached = _SUITE_CACHE.get(seed)
+    if cached is not None:
+        return list(cached)
+
     random.Random(seed)
     tasks: list[Task] = []
 
@@ -367,4 +385,8 @@ def generate_suite(seed: int = 20260728) -> list[Task]:
     for i, (lim, k) in enumerate([(511, 1), (511, 2), (511, 3), (255, 1), (255, 2), (383, 1)]):
         tasks.append(_needle(i, lim, k))
 
-    return tasks
+    # Memoised per seed: the suite is deterministic, so rebuilding it within a
+    # process is pure waste. Callers get a fresh list each time so mutating the
+    # result cannot corrupt the cache.
+    _SUITE_CACHE[seed] = tasks
+    return list(tasks)
