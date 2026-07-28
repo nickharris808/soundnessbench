@@ -107,7 +107,7 @@ json.dump(answers, open("answers.json", "w"))
 Then score:
 
 ```bash
-pip install soundnessbench
+pip install "soundnessbench@git+https://github.com/nickharris808/soundnessbench@main"
 soundnessbench score --answers answers.json --tool my-tool
 ```
 
@@ -161,7 +161,7 @@ what a trivial strategy scores cannot be interpreted.
 ## Reproduction
 
 ```bash
-pip install soundnessbench
+pip install "soundnessbench@git+https://github.com/nickharris808/soundnessbench@main"
 soundnessbench dataset --out soundnessbench-v1.jsonl --with-answers
 ```
 

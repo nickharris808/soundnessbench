@@ -1,22 +1,28 @@
 # soundnessbench
 
 [![ci](https://github.com/nickharris808/soundnessbench/actions/workflows/ci.yml/badge.svg)](https://github.com/nickharris808/soundnessbench/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/soundnessbench.svg)](https://pypi.org/project/soundnessbench/)
 [![tasks](https://img.shields.io/badge/tasks-44-informational.svg)](data/)
 [![ground truth](https://img.shields.io/badge/ground%20truth-exhaustive-brightgreen.svg)](#ground-truth)
+[![status](https://img.shields.io/badge/status-pre--release-orange.svg)](#install)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
 
 **A public benchmark for guard-soundness tools — where passing means never certifying a
 vulnerability as safe.**
+
+> **Try it now, no install:** [open the browser demo](https://huggingface.co/spaces/nickh007/certkit-demo) and press **Load a forgery** — the checker refuses it, client-side.
 
 Ask a security tool "did you find any escapes?" and a clean answer tells you nothing. It is equally
 consistent with *the guard is correct* and *you did not look hard enough*. SoundnessBench replaces that
 with ground truth: for each task, exactly how many states the guard admits that the safety property
 forbids — computed by exhaustive enumeration, sharing no code with any tool being graded.
 
+<a id="install"></a>
+```bash
+pip install "soundnessbench@git+https://github.com/nickharris808/soundnessbench@main"
 ```
-pip install soundnessbench
-```
+
+> **Pre-release.** The PyPI name is reserved and publication is imminent; until then the line above
+> is the working install. It is tested in CI on Linux, macOS, and Windows.
 
 ## 30-second quickstart
 
@@ -143,6 +149,19 @@ pytest
 23 tests. The load-bearing ones are `test_always_sound_fails_the_gate` (the metric is not gameable)
 and `test_sampler_false_certifies_the_rare_gaps` (the needles are genuinely rare). If the second ever
 stops failing the sampler, the benchmark has lost its reason to exist.
+
+## The rest of the toolkit
+
+| | |
+|---|---|
+| **[certkit](https://github.com/nickharris808/certkit)** | the certificate format and the independent checker |
+| **[exploit-counter](https://github.com/nickharris808/exploit-counter)** | if a guard is unsound, exactly how many states escape |
+| **[crs-mcp](https://github.com/nickharris808/crs-mcp)** | the verdict surface AI coding agents call, over MCP |
+| **[soundnessbench](https://github.com/nickharris808/soundnessbench)** | the benchmark that grades all of the above |
+| **[certkit-action](https://github.com/nickharris808/certkit-action)** | run the check in your CI |
+| **[pytest-mutation-verified](https://github.com/nickharris808/pytest-mutation-verified)** | prove your regression test can actually fail |
+| **[cve-proof-corpus](https://huggingface.co/datasets/nickh007/cve-proof-corpus)** | six real CVEs with machine-checkable proofs |
+| **[Try it in your browser](https://huggingface.co/spaces/nickh007/certkit-demo)** | no install; watch a forgery get refused |
 
 ---
 
