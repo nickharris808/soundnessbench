@@ -158,19 +158,41 @@ def test_the_offsets_cache_is_keyed_by_content_so_it_cannot_go_stale():
 
 
 @pytest.mark.parametrize("name", sorted(BASELINES))
-def test_every_baseline_runs_on_the_hard_split(name):
+def test_every_baseline_answers_every_task_even_when_it_cannot_run(name):
+    """A baseline that cannot run must abstain out loud.
+
+    `certkit-stack` returned an empty list when its optional packages were
+    absent -- which scores identically to abstaining but *reports* as a row with
+    no tasks, reading like the baseline was never run rather than like it could
+    not run. CI found this: the stack is installed locally and not in the
+    benchmark's own workflow."""
     answers = run_baseline(name, TASKS)
-    assert len(answers) == len(TASKS)
+    assert len(answers) == len(TASKS), f"{name} did not answer every task"
     score = score_submission(TASKS, answers, tool=name)
     assert score.n_tasks == len(TASKS)
 
 
 def test_the_split_separates_sampling_from_proving():
-    """The reason the benchmark exists. A sampler must not gate-pass here."""
+    """The reason the benchmark exists. A sampler must not gate-pass here.
+
+    `exhaustive` rather than `certkit-stack` as the exact tool, because the stack
+    is an optional dependency and this must test the benchmark rather than the
+    environment."""
     sampler = score_submission(TASKS, run_baseline("sampler-1k", TASKS), tool="sampler-1k")
-    exact = score_submission(TASKS, run_baseline("certkit-stack", TASKS), tool="certkit-stack")
+    exact = score_submission(TASKS, run_baseline("exhaustive", TASKS), tool="exhaustive")
     assert not sampler.is_sound, "a 1k sampler should miss at least one needle"
     assert exact.is_sound, "an exact tool should pass the gate"
+
+
+def test_an_unavailable_baseline_abstains_rather_than_disappearing():
+    """The stack may or may not be installed here; either way the row is full."""
+    answers = run_baseline("certkit-stack", TASKS)
+    assert len(answers) == len(TASKS)
+    if all(a["verdict"] == "ABSTAIN" for a in answers):
+        assert all("not installed" in a.get("note", "") for a in answers), (
+            "an abstention with no reason is indistinguishable from a tool that "
+            "simply gave up"
+        )
 
 
 def test_an_empty_corpus_yields_an_empty_split_rather_than_invented_tasks():

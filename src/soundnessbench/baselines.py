@@ -109,7 +109,20 @@ def _certkit_stack(tasks: Sequence[Task], **kw: Any) -> list[dict[str, Any]]:
         from certkit import atom as ck_atom
         from exploit_counter import over_acceptance as ec_over
     except ImportError:
-        return []
+        # Not installed. Abstain on every task, explicitly, rather than returning
+        # an empty list: an empty submission is scored as abstaining on
+        # everything anyway, but it reports as a row with no tasks, which reads
+        # like the baseline was not run rather than like it could not run. The
+        # note travels with each answer so a leaderboard can say why.
+        return [
+            {
+                "task_id": t.task_id,
+                "verdict": ABSTAIN,
+                "note": "certkit / exploit-counter not installed: pip install "
+                "'soundnessbench[stack]'",
+            }
+            for t in tasks
+        ]
 
     out: list[dict[str, Any]] = []
     for t in tasks:
