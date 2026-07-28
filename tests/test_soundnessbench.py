@@ -283,6 +283,14 @@ def test_sampler_baseline_is_reproducible_across_processes(tasks):
         "s=score_submission(t, run_baseline('sampler-1k', t));"
         "print(s.false_certifications)"
     )
+    # Inherit the real environment and override only the hash seed. A hand-built
+    # env broke on Windows: stripping SystemRoot leaves Python unable to
+    # initialise hash randomisation at all.
+    import os
+
+    env = dict(os.environ)
+    env["PYTHONHASHSEED"] = "random"
+
     runs = set()
     for _ in range(3):
         out = subprocess.run(
@@ -290,7 +298,7 @@ def test_sampler_baseline_is_reproducible_across_processes(tasks):
             capture_output=True,
             text=True,
             check=True,
-            env={"PYTHONHASHSEED": "random", "PATH": "/usr/bin:/bin"},
+            env=env,
         )
         runs.add(out.stdout.strip())
     assert len(runs) == 1, f"sampler score varies across processes: {runs}"
