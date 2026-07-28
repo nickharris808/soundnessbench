@@ -39,7 +39,16 @@ from collections.abc import Mapping, Sequence
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
-__all__ = ["Answer", "Score", "score_submission", "SOUND", "UNSOUND", "ABSTAIN"]
+__all__ = [
+    "Answer",
+    "Score",
+    "score_submission",
+    "validate_submission",
+    "SubmissionProblem",
+    "SOUND",
+    "UNSOUND",
+    "ABSTAIN",
+]
 
 SOUND = "SOUND"
 UNSOUND = "UNSOUND"
@@ -144,6 +153,90 @@ class Score:
             more = "" if len(self.false_certification_ids) <= 5 else " ..."
             lines.append(f"  FALSE CERTIFIED   : {shown}{more}")
         return "\n".join(lines)
+
+
+@dataclass
+class SubmissionProblem:
+    """Something wrong with a submission file, and what to do about it."""
+
+    severity: str  # "error" (will not be scored) or "warning" (scored, but read this)
+    message: str
+
+    def __str__(self) -> str:  # pragma: no cover - trivial
+        return f"{self.severity}: {self.message}"
+
+
+def validate_submission(
+    tasks: Sequence[Any],
+    answers: Sequence[Mapping[str, Any]],
+) -> list[SubmissionProblem]:
+    """Report everything wrong with a submission before it is scored.
+
+    Scoring is deliberately forgiving -- an unknown or missing task is treated as
+    an abstention so that omitting hard tasks cannot inflate a score. But
+    forgiving silently is its own trap: a submitter who typos a task id sees a
+    low score with no indication why, and concludes the benchmark is broken.
+
+    So this says out loud what scoring will quietly do. Nothing here changes a
+    verdict; it explains one.
+    """
+    problems: list[SubmissionProblem] = []
+    known = {t.task_id for t in tasks}
+
+    if not isinstance(answers, Sequence) or isinstance(answers, (str, bytes)):
+        return [SubmissionProblem("error", "the submission must be a JSON list of answers")]
+
+    seen: dict[str, int] = {}
+    for i, raw in enumerate(answers):
+        if not isinstance(raw, Mapping):
+            problems.append(
+                SubmissionProblem("error", f"entry {i} is {type(raw).__name__}, not an object")
+            )
+            continue
+        if "task_id" not in raw:
+            problems.append(SubmissionProblem("error", f"entry {i} has no 'task_id'"))
+            continue
+        tid = str(raw["task_id"])
+        try:
+            Answer.from_dict(raw)
+        except (ValueError, KeyError, TypeError) as exc:
+            problems.append(SubmissionProblem("error", str(exc)))
+            continue
+        if tid not in known:
+            problems.append(
+                SubmissionProblem(
+                    "error",
+                    f"unknown task id {tid!r}. It will be ignored, so this answer earns "
+                    f"nothing. Run 'soundnessbench tasks' for the current ids.",
+                )
+            )
+        seen[tid] = seen.get(tid, 0) + 1
+
+    duplicates = sorted(t for t, n in seen.items() if n > 1)
+    if duplicates:
+        shown = ", ".join(duplicates[:5])
+        more = "" if len(duplicates) <= 5 else f" (+{len(duplicates) - 5} more)"
+        problems.append(
+            SubmissionProblem(
+                "error",
+                f"duplicate answers for {shown}{more}. Only the last is scored, so the "
+                f"others are silently discarded -- submit one answer per task.",
+            )
+        )
+
+    missing = sorted(known - set(seen))
+    if missing:
+        shown = ", ".join(missing[:5])
+        more = "" if len(missing) <= 5 else f" (+{len(missing) - 5} more)"
+        problems.append(
+            SubmissionProblem(
+                "warning",
+                f"{len(missing)} task(s) have no answer and are scored as abstentions: "
+                f"{shown}{more}. Abstaining is allowed and never fails the gate; it "
+                f"lowers decisiveness only.",
+            )
+        )
+    return problems
 
 
 def score_submission(

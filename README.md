@@ -89,11 +89,40 @@ is obviously useless — which is the point of publishing it.
 ```bash
 soundnessbench tasks --out tasks.json        # answers stripped
 # ... run your tool, emit [{"task_id": ..., "verdict": "SOUND"|"UNSOUND"|"ABSTAIN"}, ...]
-soundnessbench score --answers answers.json --tool my-tool
+soundnessbench submit --answers answers.json --tool my-tool
 ```
 
+`submit` **validates before it scores**, and stops on anything that would make the number
+misleading rather than merely low:
+
+```
+error: unknown task id 'nope-1'. It will be ignored, so this answer earns nothing.
+        Run 'soundnessbench tasks' for the current ids.
+error: duplicate answers for bounds-000. Only the last is scored, so the others are
+        silently discarded -- submit one answer per task.
+note: 43 task(s) have no answer and are scored as abstentions: bounds-001, ... .
+        Abstaining is allowed and never fails the gate; it lowers decisiveness only.
+
+2 problem(s) must be fixed before this submission is meaningful. Nothing was scored.
+```
+
+A typo'd task id used to become a silent abstention, so you saw a low score and no reason for it.
+Missing answers stay a *warning*, because abstaining is legitimate.
+
+On success it prints your row in exactly the format the leaderboard uses:
+
+```
+Your row, as it would appear on the leaderboard:
+
+  tool               gate  coverage  decisiveness  count acc  falseC  falseA
+  ---------------- ------ -------- ------------- ---------- ------- -------
+  my-tool           PASS    100.0%        100.0%     100.0%       0       0
+```
+
+Use `soundnessbench score` instead if you want scoring with no validation.
+
 Exit code is `0` if you pass the soundness gate and `1` if you false-certify anything, so this works
-as a CI gate on your own tool.
+as a CI gate on your own tool. (`submit` exits `2` when validation stops the run.)
 
 Optionally include `"over_acceptance": <int>` to be scored on exact counts too. Getting the count
 wrong does not change your verdict score — a tool that correctly says UNSOUND without quantifying is
@@ -151,9 +180,16 @@ pip install -e ".[dev]"
 pytest
 ```
 
-24 tests. The load-bearing ones are `test_always_sound_fails_the_gate` (the metric is not gameable)
+43 tests. The load-bearing ones are `test_always_sound_fails_the_gate` (the metric is not gameable)
 and `test_sampler_false_certifies_the_rare_gaps` (the needles are genuinely rare). If the second ever
 stops failing the sampler, the benchmark has lost its reason to exist.
+
+## Documentation
+
+| | |
+|---|---|
+| [`SCOPE.md`](SCOPE.md) | what a passing gate does and does not establish |
+| [certkit's TUTORIAL](https://github.com/nickharris808/certkit/blob/main/TUTORIAL.md) | end-to-end worked example |
 
 ## The rest of the toolkit
 

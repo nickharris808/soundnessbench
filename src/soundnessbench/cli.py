@@ -21,7 +21,7 @@ from pathlib import Path
 from typing import Any
 
 from .baselines import BASELINES, run_baseline
-from .scoring import Score, score_submission
+from .scoring import Score, score_submission, validate_submission
 from .tasks import generate_suite
 
 
@@ -62,6 +62,14 @@ def main(argv: Any = None) -> int:
     p_score.add_argument("--answers", required=True, type=Path)
     p_score.add_argument("--tool", default="submission")
     p_score.add_argument("--json", action="store_true")
+
+    p_submit = sub.add_parser(
+        "submit",
+        help="validate a submission file, then score it and print its leaderboard row",
+    )
+    p_submit.add_argument("--answers", required=True, type=Path)
+    p_submit.add_argument("--tool", required=True, help="the name to show on the leaderboard")
+    p_submit.add_argument("--json", action="store_true")
 
     p_base = sub.add_parser("baseline", help="run a built-in baseline and score it")
     p_base.add_argument("--name", required=True, choices=sorted(BASELINES))
@@ -113,6 +121,66 @@ def main(argv: Any = None) -> int:
             print(f"error: {exc}", file=sys.stderr)
             return 2
         print(json.dumps(score.to_dict(), indent=2) if args.json else score.summary())
+        return 0 if score.is_sound else 1
+
+    if args.command == "submit":
+        try:
+            answers = json.loads(args.answers.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 2
+
+        if not isinstance(answers, list):
+            print(
+                f"error: a submission is a JSON list of answers, got "
+                f"{type(answers).__name__}. Each entry looks like "
+                f'{{"task_id": "bounds-000", "verdict": "SOUND"}}.',
+                file=sys.stderr,
+            )
+            return 2
+
+        problems = validate_submission(tasks, answers)
+        errors = [p for p in problems if p.severity == "error"]
+        warnings = [p for p in problems if p.severity == "warning"]
+
+        for p in errors:
+            print(f"error: {p.message}", file=sys.stderr)
+        for p in warnings:
+            print(f"note: {p.message}", file=sys.stderr)
+        if errors:
+            print(
+                f"\n{len(errors)} problem(s) must be fixed before this submission is "
+                f"meaningful. Nothing was scored.",
+                file=sys.stderr,
+            )
+            return 2
+
+        try:
+            score = score_submission(tasks, answers, tool=args.tool)
+        except (ValueError, KeyError) as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 2
+
+        if args.json:
+            print(json.dumps(score.to_dict(), indent=2))
+            return 0 if score.is_sound else 1
+
+        print(score.summary())
+        print()
+        print("Your row, as it would appear on the leaderboard:")
+        print()
+        # Same formatter the leaderboard uses, so the row a submitter sees here
+        # is character-for-character the row that would be published.
+        print(_header())
+        print(_fmt_row(score))
+        print()
+        if score.is_sound:
+            print("The gate passed: nothing unsound was certified as sound.")
+        else:
+            print(
+                "The gate FAILED. At least one unsound guard was certified as SOUND, and no\n"
+                "other column redeems that. The ids are listed above -- start there."
+            )
         return 0 if score.is_sound else 1
 
     if args.command == "baseline":
