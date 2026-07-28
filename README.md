@@ -146,7 +146,7 @@ pip install -e ".[dev]"
 pytest
 ```
 
-23 tests. The load-bearing ones are `test_always_sound_fails_the_gate` (the metric is not gameable)
+24 tests. The load-bearing ones are `test_always_sound_fails_the_gate` (the metric is not gameable)
 and `test_sampler_false_certifies_the_rare_gaps` (the needles are genuinely rare). If the second ever
 stops failing the sampler, the benchmark has lost its reason to exist.
 

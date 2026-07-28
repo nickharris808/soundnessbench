@@ -22,10 +22,21 @@ dependencies = []
 
 [project.optional-dependencies]
 dev = ["pytest>=7.0"]
-stack = ["certkit>=0.1.0", "exploit-counter>=0.1.0"]
+# Direct references: these are not on PyPI, so plain specifiers would make
+# `pip install "soundnessbench[stack]"` fail for anyone who is not us. Swap to
+# plain specifiers when publishing to PyPI, which rejects direct references.
+stack = [
+  "certkit @ git+https://github.com/nickharris808/certkit@main",
+  "exploit-counter @ git+https://github.com/nickharris808/exploit-counter@main",
+]
 
 [project.scripts]
 soundnessbench = "soundnessbench.cli:main"
+
+[tool.hatch.metadata]
+# Required by hatchling to permit the "name @ git+https://..." dependencies
+# above. Those exist because the siblings are not on PyPI yet.
+allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/soundnessbench"]
