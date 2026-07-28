@@ -190,8 +190,7 @@ def test_an_unavailable_baseline_abstains_rather_than_disappearing():
     assert len(answers) == len(TASKS)
     if all(a["verdict"] == "ABSTAIN" for a in answers):
         assert all("not installed" in a.get("note", "") for a in answers), (
-            "an abstention with no reason is indistinguishable from a tool that "
-            "simply gave up"
+            "an abstention with no reason is indistinguishable from a tool that simply gave up"
         )
 
 
