@@ -148,9 +148,10 @@ atom over two variables can score well on the public split and fall over here.
 
 **The unsound variants are constructed, and the construction is the interesting part.** The first
 design used fixed weakenings — relax by one, relax by eight — and it did not work: on relations with
-slack between the guard and the safety property, those edits changed nothing, so 16 of 21 tasks came
-out sound and "always answer SOUND" scored 76%. A benchmark a constant answer beats is not measuring
-anything.
+slack between the guard and the safety property, those edits changed nothing, so most tasks came out
+sound and "always answer SOUND" scored about three quarters of them. A benchmark a constant answer
+beats is not measuring anything. (That design was discarded, so those figures cannot be reproduced
+from this code — they are recorded as the reason for the current design, not as a result.)
 
 So the split asks a sharper question: **what is the smallest edit that breaks this guard?** For each
 relation, an exhaustive search finds the minimal relaxation `k` that admits a forbidden state. The
@@ -192,7 +193,7 @@ client-side. Your submission is never uploaded.
 
 Answers are precomputed and committed to `data/ground_truth.json`, because brute-forcing all 44
 tasks costs ~3 seconds and was being paid on **every** CLI invocation — `soundnessbench tasks` spent
-3 seconds computing answers it then stripped from its own output. It now takes 55 ms.
+3 seconds computing answers it then stripped from its own output. It now takes about 60 ms, most of which is Python starting up — time it yourself with `time soundnessbench tasks --out /tmp/t.json`.
 
 The obvious risk is a stale file. Two things prevent it:
 
@@ -248,7 +249,7 @@ pip install -e ".[dev]"
 pytest
 ```
 
-43 tests. The load-bearing ones are `test_always_sound_fails_the_gate` (the metric is not gameable)
+120 tests. The load-bearing ones are `test_always_sound_fails_the_gate` (the metric is not gameable)
 and `test_sampler_false_certifies_the_rare_gaps` (the needles are genuinely rare). If the second ever
 stops failing the sampler, the benchmark has lost its reason to exist.
 
