@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "soundnessbench: a benchmark for guard-soundness tools"
+abstract: >-
+  A soundness gate rather than an accuracy average, with ground truth by exhaustive enumeration.
+type: software
+authors:
+  - alias: nickharris808
+    website: "https://github.com/nickharris808"
+repository-code: "https://github.com/nickharris808/soundnessbench"
+url: "https://nickharris808.github.io/certified-discovery/"
+license: Apache-2.0
+date-released: "2026-07-28"
+keywords:
+  - formal verification
+  - proof-carrying code
+  - Farkas certificate
+  - static analysis
+  - software security

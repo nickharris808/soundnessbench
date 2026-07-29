@@ -3,6 +3,20 @@
 All notable changes to this package. Format follows [Keep a Changelog](https://keepachangelog.com/);
 versioning is [semantic](https://semver.org/).
 
+## [0.3.1]
+
+### Fixed
+- **`score_submission` raised `AttributeError`** on an answer entry that was not an object (a bare
+  string, `null`, a number). `validate_submission` reported it properly and the scoring path did
+  not, so a caller who scored without validating first got a traceback rather than a refusal.
+
+### Added
+- `ARCHITECTURE.md`, `TROUBLESHOOTING.md`, `CITATION.cff`, and a documentation-parity test.
+- `tests/test_stress_caches.py` — adversarial tests over the caches and the scorer: every field that
+  can change an answer must change the cache key, a corrupted ground-truth file must degrade to slow
+  rather than to wrong, omitting hard tasks must not inflate a score, duplicate answers must not
+  multiply credit, and one false certification must fail the gate even when everything else is right.
+
 ## [0.3.0]
 
 ### Added

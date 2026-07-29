@@ -228,7 +228,7 @@ def main(argv: Any = None) -> int:
             return 2
         try:
             score = score_submission(tasks, answers, tool=args.tool)
-        except (ValueError, KeyError) as exc:
+        except (ValueError, KeyError, TypeError) as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 2
         print(json.dumps(score.to_dict(), indent=2) if args.json else score.summary())
@@ -268,7 +268,7 @@ def main(argv: Any = None) -> int:
 
         try:
             score = score_submission(tasks, answers, tool=args.tool)
-        except (ValueError, KeyError) as exc:
+        except (ValueError, KeyError, TypeError) as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 2
 

@@ -67,6 +67,17 @@ class Answer:
 
     @classmethod
     def from_dict(cls, d: Mapping[str, Any]) -> Answer:
+        # An entry that is not an object at all -- a bare string, null, a number
+        # -- used to raise AttributeError here, which escaped the CLI's error
+        # handling and surfaced as a traceback rather than "your file is
+        # malformed". `validate_submission` already reported it properly; only
+        # the scoring path was unguarded, so a caller who scored without
+        # validating first got a crash.
+        if not isinstance(d, Mapping):
+            raise TypeError(
+                f"each answer must be an object with 'task_id' and 'verdict', "
+                f"got {type(d).__name__}"
+            )
         verdict = str(d.get("verdict", "")).upper()
         if verdict not in VALID_VERDICTS:
             raise ValueError(
